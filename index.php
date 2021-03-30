@@ -1,5 +1,4 @@
 <?php
-
 /**
  * A file with the task
  * 1.	Создать класс Item, который не наследуется. В конструктор класса передается ID объекта.
@@ -44,11 +43,12 @@ final class Item {
 
   /**
    * Init an object of the class
-   * @param string $objID The unique identifier of an Item
+   * @param int $objID The identifier of an Item
    */
-  function __construct(string $objID) {
+  function __construct(int $objID) {
     $this->id = $objID;
     $this->init();
+    print ("INITIALIZED");
   }
 
   /**
@@ -69,23 +69,34 @@ final class Item {
    */
   private function init () {
     /** probable query string to get data from db */
-    $q = "SELECT name, status FROM objects WHERE id=$objID";
+    $q = "SELECT name, status FROM objects WHERE id={$this->id}";
     $a = $this->db_read($q);
-    $this-> $a[0];
+    $this->name = $a[0];
     $this->status = $a[1];
+    // print_r($a);
   }
 
   /**
    * getter for the properties
    * @throws Exception on non existent prop name
    */
-  public function __get(string $name) {
+  public function __get(string $key) {
     /** @var string $props array of possible props */
     $props = ['name', 'id', 'status', 'changed'];
-    if (in_array($name, $props))
-      return $this->$name;
-    else
-      throw new Exception ("No such property called '$name'");
+    if (in_array($key, $props)) {
+      print($key);
+      return $this->{$key};
+    } else {
+        throw new Exception ("No such property called '$name'");
+    }
+  }
+
+  /**
+   * toString
+   * @returns all props in one line
+   */
+  public function __toString () {
+    return "Item {$this->id}: {$this->name} in status {$this->status} {$this->changed}";
   }
 
   /** 
@@ -95,9 +106,9 @@ final class Item {
    * @throws Exception on an attempt to set $id
    * @returns bool true if set, false nothing to do
    */
-  public function __set(string $name, $value) {
+  public function __set(string $key, $value) {
     $retval = true;
-    switch ($name) {
+    switch ($key) {
       case 'name':
         if (is_string($value) && strlen($value) > 0) {
           $this->name = $value;
@@ -143,6 +154,7 @@ final class Item {
     /** probably we should add a timestamp, Item ID and stuff */
     $stored_data = json_encode(array($this->name, $this->status), JSON_UNESCAPED_UNICODE);
     $this->db_write("objects", "Item_s11n", $stored_data);
+    print ($stored_data);
   }
 
 }
@@ -157,8 +169,16 @@ final class Item {
 </head>
 <body>
   <?php 
-  print ('Hi');
-  $i = Item("ID0");
+
+/**
+ * THE MOST PRIMITIVE TESTS
+ */
+
+  // print ('Hi."<P>"');
+  $it = new Item(101);
+  print($it);
+  $it->name = "NotDefaultName";
+  print($it);
   ?>
 </body>
 </html>
