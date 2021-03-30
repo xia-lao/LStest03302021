@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type='text/javascript' src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+  <title>JQuery Keyboard Interception</title>
+</head>
+<body></body>
+<script>
+/*
+1.	Написать функцию перехвата нажатия клавиш left arrow, right arrow, up arrow, down arrow
+2.	При нажатии на любую из клавиш появляется alert с названием нажатой клавиши
+3.	Запрещается использовать любые плагины, которые осуществляют перехват нажатых клавиш
+4.	Необходимо продолжать результат действия этих клавиш после закрытия alert
+*/
+  $('body').keydown(function(e) {
+    switch (e.which) {
+      case 37: //left
+        alert ("Left"); break
+      case 38: //up
+        alert ("Up"); break
+      case 39: //right
+        alert ("Right"); break
+      case 40: //down
+        alert ("Down"); break
+    }
+  })
+</script>
+</html>
